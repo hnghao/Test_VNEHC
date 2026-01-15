@@ -1,0 +1,22 @@
+#######################################
+# Syntax Coloring Map for exp:Makerlabvn_I2C_Line_Follower_Sensor  #
+#######################################
+
+#######################################
+#       Datatypes (KEYWORD1)          # 
+#######################################
+
+Makerlabvn_I2C_Line_Follower_Sensors	KEYWORD1
+
+#######################################
+#  Methods and Functions (KEYWORD2)   #
+#######################################
+
+setup	KEYWORD2
+getData	KEYWORD2
+getValue	KEYWORD2
+getRawValue KEYWORD2
+
+#######################################
+#         Constants (LITERAL1)        #
+#######################################
