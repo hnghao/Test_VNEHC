@@ -119,6 +119,8 @@ void OutPWR_setup()
   digitalWrite(PIN_VNEHC_PWR_OUT_0, !PIN_VNEHC_PWR_OUT_0_ACTIVE);
   digitalWrite(PIN_VNEHC_PWR_OUT_1, !PIN_VNEHC_PWR_OUT_1_ACTIVE);
   digitalWrite(PIN_VNEHC_PWR_OUT_2, !PIN_VNEHC_PWR_OUT_2_ACTIVE);
+  // delay(10);
+  OutPWR_on();
 }
 
 void OutPWR_on()
@@ -367,6 +369,28 @@ uint8_t checkVolSignal4P()
   {
     VNEHC_SHOW_LOG(F("Volt PORT4 3V3 OK :"));
     VNEHC_SHOW_LOG_LN(String(adcValue_SDA * (5.0 / 1023.0), 3) + "/" + String(adcValue_SCL * (5.0 / 1023.0), 3));
+  }
+  return VNEHC_List_Error_None;
+}
+
+uint8_t checkVolSignal4P_sSerial()
+{
+  pinMode(PIN_PORT4_RX, INPUT);
+  pinMode(PIN_PORT4_TX, INPUT);
+  delay(10);
+  int adcValue_RX = analogRead(PIN_PORT4_RX);
+  int adcValue_TX = analogRead(PIN_PORT4_TX);
+  if(!IS_INRANGE(adcValue_RX, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD) || !IS_INRANGE(adcValue_TX, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD))
+  {
+    VNEHC_SHOW_LOG_LN(F("BUGGGG"))
+    VNEHC_SHOW_LOG(F("Volt PORT4 sSerial not 3V3 (TX/RX):"));
+    VNEHC_SHOW_LOG_LN(String(adcValue_RX * (5.0 / 1023.0), 3) + "/" + String(adcValue_TX * (5.0 / 1023.0), 3));
+    return VNEHC_List_Error_SIG_NOT_3V3;
+  }
+  else
+  {
+    VNEHC_SHOW_LOG(F("Volt PORT4 sSerial 3V3 OK :"));
+    VNEHC_SHOW_LOG_LN(String(adcValue_RX * (5.0 / 1023.0), 3) + "/" + String(adcValue_TX * (5.0 / 1023.0), 3));
   }
   return VNEHC_List_Error_None;
 }

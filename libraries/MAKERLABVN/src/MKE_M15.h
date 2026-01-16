@@ -1,3 +1,12 @@
+/**
+ * MKE_M15 Bluetooth Module JDY-33 Class Library
+ * Copyright (c) 2021 MakerLab VN.  All right reserved.
+ * MIT License.
+ *    MKE_M15_setup_h_260116
+ *      - add function checkMacAddress to get last 4 characters of MAC Address
+ *      - add function setNameWithMacEnd to set name with last 4 characters of MAC Address
+ *        - e.g: setNameWithMacEnd("MKE-M15") -> "MKE-M15_7AE8"
+ */
 #ifndef MKE_M15_setup_h
 #define MKE_M15_setup_h
 #include "Arduino.h"
@@ -38,9 +47,11 @@ private:
   /* data */
   T *myp_Serial;
   unsigned long baudRate;
+  
 
 public:
   String strLog;
+  String strMac;
 
   jdy33_class(T *pSerial_)
   {
@@ -73,6 +84,7 @@ public:
       tempStrRespond = tempStrRespond + tempChar;
     }
     this->strLog = tempStrRespond;
+    // Serial.println("CMD debug: " + pa_StrCM);
     // Serial.println(this->strLog);
     if(tempStrRespond.indexOf(pa_StrCondition) > -1){
       return true;
@@ -157,7 +169,9 @@ public:
   }
 
   bool setName(String pa_strName){  // max 12 character in "+NAME=123456789012"
-    String tempString = pa_strName.substring(0,min(11, (int)pa_strName.length()));
+    int tempLen = pa_strName.length();
+    // String tempString = pa_strName.substring(0,min(11, (int)pa_strName.length()));
+    String tempString = pa_strName.substring(0,min(11, tempLen));
     if(this->baudRate != 0){
       this->myp_Serial->begin(this->baudRate);
       this->setDisconnect();
@@ -173,19 +187,70 @@ public:
           //   return true;
           // }
           // Serial.println(F("KXN read name OK!"));
-          return true;
+          // Serial.println(tempString);
+          // Serial.println(this->strLog);
+
+          return true; // Y260116 KXN DEBUG
         }
-        // Serial.println(this->strLog);
+        Serial.println(this->strLog);
 
         this->sendCommand("AT+NAME"+tempString, "+OK");
-        delay(50);
-        if(this->sendCommand("AT+NAMB"+tempString+"_BLE", "+OK")){
-          this->restart();
-          return true;
+        
+        String tempStringNameBLE = "AT+NAMB"+tempString+"_BLE";
+        
+        if(this->sendCommand(tempStringNameBLE, "+OK")){
+            this->restart();
+            return true;
         }
     }
     this->restart();
     return false;
+  }
+
+  /*
+    checkMacAddress: 
+      - cmd: AT+LADDR
+      - result: +LADDR=AAAA16047AE8
+      - strMac = "7AE8"
+   */
+  bool checkMacAddress(){
+    if(this->baudRate != 0){
+      this->myp_Serial->begin(this->baudRate);
+      this->setDisconnect();
+    }
+    else
+      this->scanBaud();
+    
+    if(this->baudRate != 0){
+        // if(this->sendCommand("AT+LADDR", "+LADDR=")){
+          // int indexStart = this->strLog.indexOf("+LADDR=") + 15;
+          // this->strMac = this->strLog.substring(indexStart, indexStart + 4);
+        if(this->sendCommand("AT+LADDR", "AAA")){
+          int indexStart = this->strLog.indexOf("AAA") + 8;
+          this->strMac = this->strLog.substring(indexStart, indexStart + 4);
+
+          // Serial.print(F("JDY33 MAC Address End: "));
+          // Serial.print(indexStart);
+          // Serial.print(F("\t"));
+          // Serial.println(this->strMac);
+          // Serial.println(this->strLog);
+          return true;
+        }
+        else{
+          Serial.println(this->strLog);
+        }
+        
+    }
+    return false;
+  }
+
+  bool setNameWithMacEnd(String pa_strName){  // max 12-4 character in "+NAME=123456789012"
+    delay(100);
+    this->checkMacAddress();
+    String tempString = pa_strName.substring(0,min(7, (int)pa_strName.length()));
+    tempString = tempString + "_" + this->strMac;
+    // String tempString = pa_strName + "_" + this->strMac;
+    return this->setName(tempString);
   }
 };
 

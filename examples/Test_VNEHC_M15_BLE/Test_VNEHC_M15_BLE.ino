@@ -1,40 +1,77 @@
 /*
-  AnalogReadSerial
-
-  Reads an analog input on pin 0, prints the result to the Serial Monitor.
-  Graphical representation is available using Serial Plotter (Tools > Serial Plotter menu).
-  Attach the center pin of a potentiometer to pin A0, and the outside pins to +5V and ground.
-
-  This example code is in the public domain.
-
-  https://www.arduino.cc/en/Tutorial/BuiltInExamples/AnalogReadSerial
+  Y260116: 
+    - Kiem tra dien ap cua tin hieu 3V < S < 3V3 OK
+    - Set ten theo chuan M0015_xxxx voi xxxx la 4 chu cuoi ma MAC
 */
-
+#include "Task_VNEHC_Test.h"
 #include "SoftwareSerial.h"
+#include "MKE_M15.h"
 
-SoftwareSerial sSerial(A4, A5);
+Task_VNEHC_Test Task_VNEHC_Test1;
+
+// #define PIN_PORT4_RX      A1
+// #define PIN_PORT4_TX      A2
+SoftwareSerial sSerial(PIN_PORT4_RX, PIN_PORT4_TX);
+
+
+MKE_M15_SSerial(sSerial);
 
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  delay(1000);
-  checkAnalog();
-  checkAnalog();
-  checkAnalog();
-  checkAnalog();
-  checkAnalog();
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  // delay(1000);
+
+  Task_VNEHC_Test1.VNEHC_Serial = &Serial;
+  Task_VNEHC_Test1.OutPWR_setup();
+  // delay(1000);
+  // Task_VNEHC_Test1.delayms(1000);
+  if(Task_VNEHC_Test1.checkVolSignal4P_sSerial() != VNEHC_List_Error_None)
+  {
+    Task_VNEHC_Test1.OutPWR_off();
+    Serial.println("\t\tSignal FAIL");
+    Serial.println("\t1. ket noi day khong chac (TX - RX)");
+    Serial.println("\t2. LDO 3V3 Loi");
+    Serial.println("PLEASE RESET FOR NEXT TEST!");
+    while(1);
+  }
+  else
+  {
+    Serial.println("\t\tSignal GOOD");
+  }
+  
+  Task_VNEHC_Test1.delayms(100);
+  pinMode(PIN_PORT4_TX, OUTPUT);
   sSerial.begin(9600);
+
+  // MKE_M15.checkMacAddress();
+
+  uint8_t tempStatus = MKE_M15.setNameWithMacEnd("M0015");
+  if(tempStatus && (MKE_M15.strMac.length() == 4))
+  {
+    Serial.println("Setname OK " + MKE_M15.strMac);
+  }
+  else
+  {
+    Serial.println("Setname FAIL");
+  }
+
+  Serial.println("PLEASE RESET FOR NEXT TEST!");
+  Task_VNEHC_Test1.OutPWR_off();
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // read the input on analog pin 0:
-  // checkSerial(&Serial, &sSerial);
-  // checkSerial(&sSerial, &Serial);
+  // // read the input on analog pin 0:
+  checkSerial(&Serial, &sSerial);
+  checkSerial(&sSerial, &Serial);
 
-  checkSerial(&Serial, &Serial);
-  autoSendAT();
+  // // checkSerial(&Serial, &Serial);
+  // autoSendAT();
 }
 
 void autoSendAT()
@@ -45,35 +82,22 @@ void autoSendAT()
   {
     lastMillis = millis();
 
-    Serial.println("AT");
+    sSerial.println("AT");
   }
 }
+
+// void checkSerial(Stream *in, Stream *out)
+// {
+//   while(in->available()){
+//     out->write(in->read());
+//   }
+// }
+
 
 void checkSerial(Stream *in, Stream *out)
 {
-  while(in->available()){
-    out->write(in->read());
+  if(in->available()){
+    String tempCmd = in->readString();
+    out->println(tempCmd);
   }
-}
-
-void checkAnalog()
-{
-  // static unsigned long lastMillis;
-
-  // if(millis() - lastMillis >= 1000)
-  // {
-  //   lastMillis = millis();
-  pinMode(A4, INPUT);
-  pinMode(A5, INPUT);
-  delay(100);
-
-    int sensorValue = analogRead(A4);
-    int sensorValue2 = analogRead(A5);
-    // print out the value you read:
-    Serial.print(sensorValue);
-    Serial.print("\t");
-    Serial.println(sensorValue2);
-    delay(100);  // delay in between reads for stability
-  // }
-  
 }
