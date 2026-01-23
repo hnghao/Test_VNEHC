@@ -1,7 +1,9 @@
 /*
     y251222: 
         Phát hiện chập nguồn ngắt OK
-        Phát hiện I led tiêu chuẩn OK 
+        Phát hiện I led tiêu chuẩn OK
+    y260123:
+        Uncomment các dòng báo lỗi để vào chương trình test 
 */
 
 // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
@@ -37,20 +39,20 @@ Adafruit_NeoPixel *pPixels;
 void setup() {
   Serial.begin(115200);
   Task_VNEHC_Test1.setup();
-  if(Task_VNEHC_Test1.checkCurrent_mA(200) != VNEHC_List_Error_None)
-  {
-    while(1);
-  }
-  Task_VNEHC_Test1.checkVoltageCurrent();
-  // Task_VNEHC_Test1.checkVolSignal4P();
-  if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
-  {
-    while(1)
-    {
-      Serial.println("===");
-      delay(2000);
-    }
-  }
+  // if(Task_VNEHC_Test1.checkCurrent_mA(200) != VNEHC_List_Error_None)
+  // {
+  //   while(1);
+  // }
+  // Task_VNEHC_Test1.checkVoltageCurrent();
+  // // Task_VNEHC_Test1.checkVolSignal4P();
+  // if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
+  // {
+  //   while(1)
+  //   {
+  //     Serial.println("===");
+  //     delay(2000);
+  //   }
+  // }
 
   pPixels = new Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
   

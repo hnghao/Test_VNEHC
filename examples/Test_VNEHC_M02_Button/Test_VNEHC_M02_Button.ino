@@ -2,7 +2,8 @@
     y251222: 
         Phát hiện chập nguồn ngắt OK
         San sang Test
-
+    y260123:
+        Sử dụng lại bản phát hiện cũ checkAnalog() để test tạm thời.
 */
 
 // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
@@ -48,8 +49,7 @@ void setup() {
 
 
   // Task_VNEHC_Test1.checkVolSignal4P();
-  if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
-  {
+  if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None){
     Serial.println("\t\tERROR");
     // while(1)
     // {
@@ -71,7 +71,8 @@ void setup() {
 }
 
 void loop() {
-  checkAnalog2();
+  // checkAnalog2();
+  checkAnalog();
   Task_VNEHC_Test1.delayms(10);
 }
 
@@ -107,7 +108,7 @@ void checkAnalog2()
     if(flag_ShowPullUpErr == true)
     {
       flag_ShowPullUpErr = false;
-      Serial.println(F("ERROR PULLUP"));
+      Serial.println(F("ERROR PULLUP"));         
       // Task_VNEHC_Test1.delayms(2000);  
     }
     

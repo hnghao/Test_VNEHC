@@ -2,7 +2,8 @@
     y251222: 
         Phát hiện chập nguồn ngắt OK
         Sang sang Test
-
+    y260123:
+        Uncomment hai dòng báo lỗi để chương trình vào chức năng test.
 */
 
 // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
@@ -26,20 +27,18 @@ void setup() {
   
   Task_VNEHC_Test1.checkVoltageCurrent();
 
-  if(Task_VNEHC_Test1.checkCurrent_mA(50) != VNEHC_List_Error_None)
-  {
-    while(1);
-  }
+  // if(Task_VNEHC_Test1.checkCurrent_mA(50) != VNEHC_List_Error_None){
+  //   while(1);
+  // }
 
-  // Task_VNEHC_Test1.checkVolSignal4P();
-  if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
-  {
-    while(1)
-    {
-      Serial.println("===");
-      delay(2000);
-    }
-  }
+  // // Task_VNEHC_Test1.checkVolSignal4P();
+  // if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None){
+  //   while(1)
+  //   {
+  //     Serial.println("===");
+  //     delay(2000);
+  //   }
+  // }
 
   Task_VNEHC_Test1.addHelp(help);
 
@@ -65,7 +64,7 @@ void checkAnalog()
   {
     Serial.println(F(" ERROR, Thu che mat LDR, go help<CR><LF> vào SerialMonitor de biet cach fix"));
   }
-  Task_VNEHC_Test1.delayms(1000);
+  Task_VNEHC_Test1.delayms(200);
 }
 
 void showNote()
