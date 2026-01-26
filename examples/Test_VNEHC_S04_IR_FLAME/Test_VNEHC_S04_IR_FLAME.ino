@@ -56,7 +56,7 @@ void setup() {
 
 void loop() {
   checkAnalog2();
-  
+  Task_VNEHC_Test1.delayms(10); // function check OverCurent
 }
 
 void checkAnalog2()

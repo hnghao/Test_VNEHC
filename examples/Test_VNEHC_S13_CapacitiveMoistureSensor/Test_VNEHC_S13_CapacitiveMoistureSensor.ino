@@ -1,8 +1,11 @@
 /*
     y260126:
-      - KXN chương trình Đang build
+      - KXN chương trình Test OK: dùng ngón tay cái tiếp xúc với cảm biến đoạn 10-20
     
       - Các bug thường gặp
+
+      - Bug chuong trình test:
+          - Khi không Port 3 tự do sẽ bị loạn cho đến khi kết nối với cảm biến
         
     
         Phát hiện chập nguồn ngắt OK
@@ -15,12 +18,31 @@
 
 Task_VNEHC_Test Task_VNEHC_Test1;
 
+// #define VOLT_THESHOLD_UP_MIN      (7260)
+// #define VOLT_THESHOLD_UP_MAX      (8060)
 
-#define VOLT_THESHOLD_UP_MIN      (6350)
-#define VOLT_THESHOLD_UP_MAX      (6850)
+// #define VOLT_THESHOLD_DOWN_MIN      (3800)
+// #define VOLT_THESHOLD_DOWN_MAX      (4200)
 
-#define VOLT_THESHOLD_DOWN_MIN      (0)
-#define VOLT_THESHOLD_DOWN_MAX      (150)
+// // kxn
+// #define VOLT_THESHOLD_UP_MIN      (5660)
+// #define VOLT_THESHOLD_UP_MAX      (6060)
+// #define VOLT_THESHOLD_DOWN_MIN      (4200)
+// #define VOLT_THESHOLD_DOWN_MAX      (4600)
+
+// Hao
+// #define VOLT_THESHOLD_UP_MIN      (5660)
+// #define VOLT_THESHOLD_UP_MAX      (6060)
+// #define VOLT_THESHOLD_DOWN_MIN      (4400)
+// #define VOLT_THESHOLD_DOWN_MAX      (4800)
+
+// Hộp nước tại 20
+#define VOLT_THESHOLD_UP_MIN      (5660)
+#define VOLT_THESHOLD_UP_MAX      (6860)
+#define VOLT_THESHOLD_DOWN_MIN      (4000)
+#define VOLT_THESHOLD_DOWN_MAX      (4800)
+
+#define EN_DEBUG_KXN          (0)
 
 
 // Which pin on the Arduino is connected to the NeoPixels?
@@ -34,7 +56,7 @@ void setup() {
   
   Task_VNEHC_Test1.checkVoltageCurrent();
 
-  if(Task_VNEHC_Test1.checkCurrent_mA(50) != VNEHC_List_Error_None)
+  if(Task_VNEHC_Test1.checkCurrent_mA(20) != VNEHC_List_Error_None)
   {
     while(1);
   }
@@ -56,12 +78,12 @@ void setup() {
 
 void loop() {
   checkAnalog2();
-  
+  Task_VNEHC_Test1.delayms(10); // function check OverCurent
 }
 
 void checkAnalog2()
 {
-  if(Task_VNEHC_Test1.isPullUp_Port3_OK(0, VOLT_THESHOLD_UP_MIN, VOLT_THESHOLD_UP_MAX, 50) != VNEHC_List_Error_None)
+  if(Task_VNEHC_Test1.isPullUp_Port3_OK(EN_DEBUG_KXN, VOLT_THESHOLD_UP_MIN, VOLT_THESHOLD_UP_MAX, 50) != VNEHC_List_Error_None)
   {
     if(flag_ShowPullUpErr == true)
     {
@@ -73,15 +95,15 @@ void checkAnalog2()
   }
   else
   {
-    Serial.println(F("Dat sat mat sensor MKE0-S10 vao IR cua FLAME"));
+    Serial.println(F("Dùng ngón tay cái tiếp xúc với cảm biến sensor MKE-S13 đoạn 10-20 "));
     while(1)
     {
-      if(Task_VNEHC_Test1.isPullDown_Port3_OK(0, VOLT_THESHOLD_DOWN_MIN, VOLT_THESHOLD_DOWN_MAX) == VNEHC_List_Error_None)
+      if(Task_VNEHC_Test1.isPullDown_Port3_OK(EN_DEBUG_KXN, VOLT_THESHOLD_DOWN_MIN, VOLT_THESHOLD_DOWN_MAX) == VNEHC_List_Error_None)
       {
         
         Task_VNEHC_Test1.delayms(100);
         
-        if(Task_VNEHC_Test1.isPullUp_Port3_OK(0, VOLT_THESHOLD_UP_MIN, VOLT_THESHOLD_UP_MAX, 1000) == VNEHC_List_Error_None)
+        if(Task_VNEHC_Test1.isPullUp_Port3_OK(EN_DEBUG_KXN, VOLT_THESHOLD_UP_MIN, VOLT_THESHOLD_UP_MAX, 1000) == VNEHC_List_Error_None)
         {
           Serial.println(F("\t\tFLAME GOOD\t\t Sensor tiep theo"));
           flag_ShowPullUpErr = true;
@@ -108,7 +130,7 @@ void showNote()
   Serial.println();
   Serial.println();
   Serial.println(F("LUU Y TRUOC KHI TEST"));
-  Serial.println(F("su dung MKE-S10 Do line don dat sat vao Sensor nhat co the, sau do de Sensor trống"));
+  Serial.println(F("Dùng ngón tay cái tiếp xúc với cảm biến sensor MKE-S13 đoạn 10-20 "));
   Serial.println(F(""));
   Task_VNEHC_Test1.delayms(3000);
 }
