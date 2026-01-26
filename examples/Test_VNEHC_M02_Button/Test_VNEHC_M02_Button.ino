@@ -71,8 +71,8 @@ void setup() {
 }
 
 void loop() {
-  // checkAnalog2();
-  checkAnalog();
+  checkAnalog2();
+  // checkAnalog();
   Task_VNEHC_Test1.delayms(10);
 }
 
@@ -98,7 +98,7 @@ void checkAnalog()
   {
     Serial.println(F(" Nut đang duoc nhan, neu khong thi ERROR"));
   }
-  Task_VNEHC_Test1.delayms(1000);
+  Task_VNEHC_Test1.delayms(350);
 }
 
 void checkAnalog2()
