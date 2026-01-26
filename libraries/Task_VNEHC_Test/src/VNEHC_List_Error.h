@@ -9,6 +9,7 @@ enum VNEHC_List_Error
     VNEHC_List_Error_UART,
     VNEHC_List_Error_SIG_NOT_3V3,
     VNEHC_List_Error_SIG_OVER_3V3,
+    VNEHC_List_Error_SIG_LOWER_3V3,
     VNEHC_List_Error_PWR_OVER_CURRENT,
     VNEHC_List_Error_PWR_VOLT_LOWER,
     VNEHC_List_Error_PWR_VOLT_HIGHER,

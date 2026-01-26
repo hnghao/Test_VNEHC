@@ -1,4 +1,6 @@
 /*
+    y260119:
+        kxn test lại với Button, vẫn tốt, chưa có bug
     y251222: 
         Phát hiện chập nguồn ngắt OK
         San sang Test
@@ -47,26 +49,14 @@ void setup() {
   }
 
 
-  // Task_VNEHC_Test1.checkVolSignal4P();
+  
   if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
   {
     Serial.println("\t\tERROR");
-    // while(1)
-    // {
-    //   Task_VNEHC_Test1.delayms(2000);
-    // }
   }
 
-  // if(Task_VNEHC_Test1.isPullUp_Port3_OK() != VNEHC_List_Error_None)
-  // {
-  //   Serial.println("ERROR PULLUP");
-  //   while(1)
-  //   {
-  //     Task_VNEHC_Test1.delayms(2000);
-  //   }
-  // }
-
   showNote();
+  flag_ShowPullUpErr = true;
 
 }
 
@@ -107,7 +97,7 @@ void checkAnalog2()
     if(flag_ShowPullUpErr == true)
     {
       flag_ShowPullUpErr = false;
-      Serial.println(F("ERROR PULLUP"));
+      Serial.println(F("\t\tERROR PULLUP"));
       // Task_VNEHC_Test1.delayms(2000);  
     }
     
@@ -119,14 +109,9 @@ void checkAnalog2()
     {
       if(Task_VNEHC_Test1.isPullDown_Port3_OK() == VNEHC_List_Error_None)
       {
-        // Serial.println(F("\t\tNut Nhan GOOD\t\t Nut tiep theo"));
-        // flag_ShowPullUpErr = true;
+        
         Task_VNEHC_Test1.delayms(1000);
-        // while(Task_VNEHC_Test1.isPullUp_Port3_OK() != VNEHC_List_Error_None)
-        // {
-        //   Task_VNEHC_Test1.delayms(10);
-        // }
-
+        
         if(Task_VNEHC_Test1.isPullUp_Port3_OK(1) == VNEHC_List_Error_None)
         {
           Serial.println(F("\t\tNut Nhan GOOD\t\t Nut tiep theo"));
@@ -154,7 +139,7 @@ void showNote()
   Serial.println();
   Serial.println();
   Serial.println(F("LUU Y TRUOC KHI TEST"));
-  // Serial.println(F("Nhan nut (~0mV) và nha nut (~3300mV), quan sat gia tri mV"));
+  
   Serial.println(F("Nhan nut de Test, quan sat GOOD hoac ERROR"));
   Serial.println(F(""));
   Task_VNEHC_Test1.delayms(3000);

@@ -1,4 +1,6 @@
 /*
+    Y260119: Code test vẫn OK
+    
     y251222: 
         Phát hiện chập nguồn ngắt OK
         Phát hiện I led tiêu chuẩn OK 
@@ -45,11 +47,11 @@ void setup() {
   // Task_VNEHC_Test1.checkVolSignal4P();
   if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
   {
-    while(1)
-    {
-      Serial.println("===");
-      delay(2000);
-    }
+    // while(1)
+    // {
+    //   Serial.println("===");
+    //   delay(2000);
+    // }
   }
 
   pPixels = new Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);

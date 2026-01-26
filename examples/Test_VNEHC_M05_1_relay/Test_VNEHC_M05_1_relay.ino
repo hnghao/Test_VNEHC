@@ -1,4 +1,9 @@
 /*
+    Y260119: Code Test chưa hoàn thiện
+        - chưa dectect được lỗi Diod flyback trong code
+            - Các lỗi có thể gặp:
+                - Diod hở chân:
+                - Diod Ngược:
     Y251229:
         - Test được trở kéo xuống có hoạt động không
         - Test được dòng hoạt động của led 
@@ -27,6 +32,11 @@ Task_VNEHC_Test Task_VNEHC_Test1;
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(115200);
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  Serial.println();
   Serial.println(F("Start test M05 Relay"));
   Task_VNEHC_Test1.setup();
   Task_VNEHC_Test1.addHelp(&help);
@@ -92,7 +102,7 @@ void loop() {
   // Serial.println(sensorValue);
 
 
-  Serial.println(Task_VNEHC_Test1.getPort3_mA());
+  // Serial.println(Task_VNEHC_Test1.getPort3_mA());
   Task_VNEHC_Test1.delayms(1000);  // delay in between reads for stability
 }
 

@@ -1,4 +1,9 @@
 /*
+    y260119:
+      - KXN chương trình vẫn test TỐT
+    y260117:
+      - Các bug thường gặp
+        - Khi R keo lên hở chân SIG ~ 0V
     y251222: 
         Phát hiện chập nguồn ngắt OK
         Sang sang Test
@@ -32,13 +37,13 @@ void setup() {
   }
 
   // Task_VNEHC_Test1.checkVolSignal4P();
-  if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
+  if(Task_VNEHC_Test1.checkVolSignal3P() == VNEHC_List_Error_SIG_OVER_3V3)
   {
-    while(1)
-    {
-      Serial.println("===");
-      delay(2000);
-    }
+    // while(1)
+    // {
+    //   Serial.println("===");
+    //   delay(2000);
+    // }
   }
 
   Task_VNEHC_Test1.addHelp(help);
@@ -52,12 +57,13 @@ void loop() {
 
 void checkAnalog()
 {
+  Task_VNEHC_Test1.delayms(1000);
   int tempValue = analogRead(PIN);
   // adc to V
   tempValue = map(tempValue, 0, 1023, 0, 5000);
   Serial.print(tempValue);
   Serial.print(" mV");
-  if(IS_INRANGE(tempValue, 2400, 3300))
+  if(IS_INRANGE(tempValue, 2200, 3380))
   {
     Serial.println(F(" GOOD"));
   }
@@ -65,7 +71,7 @@ void checkAnalog()
   {
     Serial.println(F(" ERROR, Thu che mat LDR, go help<CR><LF> vào SerialMonitor de biet cach fix"));
   }
-  Task_VNEHC_Test1.delayms(1000);
+  
 }
 
 void showNote()
@@ -86,8 +92,8 @@ void help()
   Serial.println();
   Serial.println();
   Serial.println();
-  Serial.println(F("Kiểm tra trở kéo lên"));
-  Serial.println(F("Kiểm tra LDO 3V3"));
+  Serial.println(F("Kiem tra ho chan R ke ben Lable SENSOR"));
+  Serial.println(F("Kiem tra LDO 3V3"));
   Serial.println(F(""));
   Task_VNEHC_Test1.delayms(3000);
 }

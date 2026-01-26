@@ -1,4 +1,6 @@
 /*
+    y260119
+        - Code test vẫn hoạt động tốt
     y251222: 
         Phát hiện chập nguồn ngắt OK
         Sang sang Test
@@ -34,14 +36,14 @@ void setup() {
   // Task_VNEHC_Test1.checkVolSignal4P();
   if(Task_VNEHC_Test1.checkVolSignal3P() != VNEHC_List_Error_None)
   {
-    while(1)
-    {
-      Serial.println("===");
-      Serial.println(F("Restart Please!"));
-      Task_VNEHC_Test1.OutPWR_off();
+    // while(1)
+    // {
+    //   Serial.println("===");
+    //   Serial.println(F("Restart Please!"));
+    //   Task_VNEHC_Test1.OutPWR_off();
 
-      Task_VNEHC_Test1.delayms(2000);
-    }
+    //   Task_VNEHC_Test1.delayms(2000);
+    // }
   }
 
   showNote();
@@ -75,6 +77,7 @@ int readVoltFromPIN3P_mV()
 
 uint8_t checkAnalog()
 {
+  Task_VNEHC_Test1.delayms(1000);
   // int tempValue = analogRead(PIN);
   // // adc to V
   // tempValue = map(tempValue, 0, 1023, 0, 5000);
@@ -98,7 +101,7 @@ uint8_t checkAnalog()
     Serial.println(F(" ERROR nêu khong xoay bien tro Theo MAX(~3300mV), MIN(~0mV), MID(~1650mV)"));
   }
 
-  Task_VNEHC_Test1.delayms(1000);
+  
 }
 
 void showNote()

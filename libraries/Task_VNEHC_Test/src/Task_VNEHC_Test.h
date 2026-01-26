@@ -337,18 +337,34 @@ uint8_t checkVoltageCurrent(void *user_callback(void))
   return VNEHC_List_Error_None;
 }
 
-uint8_t checkVolSignal3P()
+uint8_t checkVolSignal3P(uint8_t paFlagDebug=0)
 {
   pinMode(PIN_PORT3_SIG, INPUT);
   delay(10);
   int adcValue = analogRead(PIN_PORT3_SIG);
 
-  if(IS_INRANGE(adcValue, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD + 100) == false)
+  // if(IS_INRANGE(adcValue, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD + 100) == false)
+  if(adcValue < (ADCVALUE_3V3_THRESHOLD - 100))
   {
-    VNEHC_SHOW_LOG_LN(F("BUGGGG"))
-    VNEHC_SHOW_LOG(F("Volt PORT3 not 3V3 :"));
-    VNEHC_SHOW_LOG_LN(String(adcValue * (5.0 / ADC_RESOLUTION), 3));
-    return VNEHC_List_Error_SIG_NOT_3V3;
+    if(paFlagDebug)
+    {
+      VNEHC_SHOW_LOG_LN(F("BUGGGG"));
+      VNEHC_SHOW_LOG(F("Volt PORT3 < 3V3 :"));
+      VNEHC_SHOW_LOG_LN(String(adcValue * (5.0 / ADC_RESOLUTION), 3));
+    }
+    
+    return VNEHC_List_Error_SIG_LOWER_3V3;
+  }
+  else if(adcValue > (ADCVALUE_3V3_THRESHOLD + 100))
+  {
+    if(paFlagDebug)
+    {
+      VNEHC_SHOW_LOG_LN(F("BUGGGG"));
+      VNEHC_SHOW_LOG(F("Volt PORT3 > 3V3 :"));
+      VNEHC_SHOW_LOG_LN(String(adcValue * (5.0 / ADC_RESOLUTION), 3));
+    }
+    
+    return VNEHC_List_Error_SIG_OVER_3V3;
   }
   else
   {
