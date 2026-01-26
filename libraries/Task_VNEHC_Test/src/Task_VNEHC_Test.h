@@ -49,7 +49,7 @@
 #define ADC_RESOLUTION    1023.0
 #define ADCVALUE_3V3_THRESHOLD   720   // ~3.3V
 #define ADCVALUE_PULL_UP_THRESHOLD   6832   
-#define ADCVALUE_PULL_UP_THRESHOLD_ERROR   50   
+#define ADCVALUE_PULL_UP_THRESHOLD_ERROR   150 // FIX BUG when 3.34V  
 
 // Safe voltage range for VNEHC power input
 #define INA_VOLTAGE_SAFE_MAX_mV   5100
